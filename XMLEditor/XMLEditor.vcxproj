@@ -126,9 +126,11 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="XMLController.cpp" />
+    <ClCompile Include="XMLLine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="XMLController.h" />
+    <ClInclude Include="XMLLine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

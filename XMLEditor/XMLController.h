@@ -1,28 +1,32 @@
 #pragma once
-#include <iostream>
-#include <fstream>
-#include <cstring>
+#include "XMLLine.h"
 #include <string>
-#include <sstream>
+#include <vector>
+#include <stack>
+#include <fstream>
 
-using namespace std;
+
+
+
 
 class XMLController
 {
 private:
-	string path;
-	fstream file;
+	std::string path;
+	std::string fileContent;
+	std::vector<XMLLine> nodeList;
+	
+
 
 public:
-	XMLController(string path);
-
-	bool isXML();
-	string getPath();
-	static bool isXML(string path);
-	void closeFile();
-	string readFile();
-
-
+	XMLController();
+	~XMLController();
+	std::string getPath();
+	bool isXML(std::string path);
+	bool isXMLValid();
+	
+	std::string readFile(std::fstream& file);
+	std::string getFileContent();
 
 
 };

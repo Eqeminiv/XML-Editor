@@ -1,29 +1,29 @@
-#include <iostream>
-#include <cstring>
-#include <string>
-#include <cctype>
-#include "XMLController.h"
-#include <filesystem>
 
-using namespace std;
+#include "XMLController.h"
+#include <iostream>
+#include <string.h>
+
+
+
 
 int main()
 {
-	string path;
-	
-	//cout << filesystem::exists("D:/test.xml");
 
-	while (!filesystem::exists(path) || !XMLController::isXML(path))
+
+	XMLController controller = XMLController();
+
+	/*std::string test = "  <Agenda type=\"gardening\">";
+	std::regex reg("<\\w* tr");
+	std::smatch results;
+	
+
+	if (std::regex_search(test, wynik, reg))
 	{
-		cout << "Path input: " << endl;
-		cin >> path;
-		//cout << filesystem::exists(path);
-	}
-	XMLController controller(path);
-	cout << controller.readFile();
-	//cout << controller.getPath();
-	//cout << controller.isXML();
-	controller.closeFile();
+		std::cout << results[0];
+		
+	}*/
+	
+	
 	
 	return 0;
 }
