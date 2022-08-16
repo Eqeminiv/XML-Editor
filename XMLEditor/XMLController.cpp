@@ -8,44 +8,58 @@
 
 
 
-XMLController::XMLController()
+XMLController::XMLController(const std::string& path)
 {
-	std::string path = "";
-	while (!std::filesystem::exists(path) || !XMLController::isXML(path))
-	{
-		std::cout << "Path input: " << std::endl;
-		std::cin >> path;
-	}
+
 	this->path = path;
 	
 	std::fstream file;
 	file.open(path, std::ios::in);
-	this->fileContent = readFile(file);
+	fileContent = readFile(file);
 	file.close();
-	std::stack<XMLLine> nodeStack;
+	std::stack<XMLTag> nodeStack;
 	
+	tree = new XMLComposite;
 
 	
 	std::string temp;
 	std::istringstream tempIstring(fileContent);
 	std::cout << fileContent << std::endl;
+
+	tree->SetParent(nullptr);
+
+	XMLComponent* currXMLComponent = tree;
+
 	while (std::getline(tempIstring, temp))
 	{
-		XMLLine xmlLine = XMLLine(temp);
-		nodeStack.push(xmlLine);
+		XMLTag xmlNode = XMLTag(temp);
+		nodeStack.push(xmlNode);
+
+		this->nodeList.push_back(xmlNode);
 		
-		try //where should start?
-		{
-			if (nodeStack.top().getIsEnd())
+
+
+			/*if (nodeStack.top().getIsEnd())
 			{
+
 				if (nodeStack.top().getIsStart())
+				{
+					XMLComponent* xmlLeaf = new XMLLeaf;
+					xmlLeaf->SetXMLTag(nodeStack.top());
+					currXMLComponent->Add(xmlLeaf);
+
 					nodeStack.pop();
+				}
 				else
 				{
-					XMLLine tempXMLLine = nodeStack.top();
+					XMLTag tempXMLTag = nodeStack.top();
 					nodeStack.pop();
-					if (tempXMLLine.getName() == nodeStack.top().getName())
+					if (tempXMLTag.getName() == nodeStack.top().getName())
+					{
 						nodeStack.pop();
+						currXMLComponent = currXMLComponent->GetParent();
+					}
+
 					else
 					{
 						//catch exception
@@ -53,18 +67,53 @@ XMLController::XMLController()
 					}
 				}
 			}
-			this->nodeList.push_back(xmlLine);
-		}
-		catch (const std::exception & error)
+			else
+			{
+				XMLComponent* xmlComponent = new XMLComposite;
+				xmlComponent->SetXMLTag(nodeStack.top());
+				currXMLComponent->Add(xmlComponent);
+				currXMLComponent = xmlComponent;
+			}*/
+
+		if (xmlNode.getIsEnd())
 		{
-			std::cout << error.what();
-			//do what?
+			if (xmlNode.getIsStart())
+			{
+				XMLComponent* xmlLeaf = new XMLLeaf;
+				xmlLeaf->SetXMLTag(xmlNode);
+				currXMLComponent->Add(xmlLeaf);
+
+			}
+			else
+			{
+				XMLTag tempXMLTag = xmlNode;
+				if (currXMLComponent->GetInfo().getName() == xmlNode.getName())
+				{
+					currXMLComponent = currXMLComponent->GetParent();
+				}
+
+				else
+				{
+					//catch exception
+					throw std::runtime_error("Incorrect XML\n");
+				}
+			}
 		}
-		catch (...)
+		else
 		{
-			std::cout << "Unexpected error" << std::endl;
+			XMLComponent* xmlComponent = new XMLComposite;
+			xmlComponent->SetXMLTag(xmlNode);
+			currXMLComponent->Add(xmlComponent);
+			currXMLComponent = xmlComponent;
 		}
+
+			
+			
 	}
+	tree->ShowAll(0);
+	
+
+
 }
 
 XMLController::~XMLController()
@@ -72,7 +121,7 @@ XMLController::~XMLController()
 	//todo
 }
 
-bool XMLController::isXML(std::string path) 
+bool XMLController::isXML(const std::string& path) 
 {
 	std::string tempPath = path.substr(path.find_last_of(".") + 1);
 	std::string xml = "XML";

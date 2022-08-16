@@ -1,13 +1,21 @@
 #include "XMLController.h"
 #include <iostream>
+#include <filesystem>
 
 
 int main()
 {
 
-
-	XMLController controller = XMLController();
-
+	try
+	{
+		std::string path;
+		while (!std::filesystem::exists(path) || !XMLController::isXML(path))
+		{
+			std::cout << "Path input: " << std::endl;
+			std::cin >> path;
+		}
+		XMLController controller(path);
+	}
 	/*std::string test = "  <Agenda type=\"gardening\">";
 	std::regex reg("<\\w* tr");
 	std::smatch results;
@@ -18,6 +26,15 @@ int main()
 		std::cout << results[0];
 		
 	}*/
+	catch (const std::exception & error)
+	{
+		std::cout << error.what();
+		//do what?
+	}
+	catch (...)
+	{
+		std::cout << "Unexpected error" << std::endl;
+	}
 	
 	
 	

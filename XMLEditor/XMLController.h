@@ -1,5 +1,6 @@
 #pragma once
-#include "XMLLine.h"
+#include "XMLTag.h"
+#include "XMLComponent.h"
 #include <string>
 #include <vector>
 #include <fstream>
@@ -13,15 +14,17 @@ class XMLController
 private:
 	std::string path;
 	std::string fileContent;
-	std::vector<XMLLine> nodeList;
+	std::vector<XMLTag> nodeList;
+	
+	XMLComponent* tree;
 	
 
 
 public:
-	XMLController();
+	XMLController(const std::string& path);
 	~XMLController();
 	std::string getPath();
-	bool isXML(std::string path);
+	static bool isXML(const std::string& path);
 	bool isXMLValid();
 	
 	std::string readFile(std::fstream& file);

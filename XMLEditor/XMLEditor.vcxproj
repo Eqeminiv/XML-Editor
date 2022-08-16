@@ -124,13 +124,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Attribute.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="XMLComponent.cpp" />
     <ClCompile Include="XMLController.cpp" />
-    <ClCompile Include="XMLLine.cpp" />
+    <ClCompile Include="XMLTag.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Attribute.h" />
+    <ClInclude Include="XMLComponent.h" />
     <ClInclude Include="XMLController.h" />
-    <ClInclude Include="XMLLine.h" />
+    <ClInclude Include="XMLTag.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
