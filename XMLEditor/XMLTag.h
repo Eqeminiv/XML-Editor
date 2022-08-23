@@ -4,30 +4,27 @@
 #include <vector>
 
 
-class XMLTag //XMLTag
+class XMLTag
 {
 private:
-	std::string name;
+	std::string name; //same with push_back but for XMLController
 	std::string value;
 	std::vector<Attribute> attributeVector;
-	bool isStart, isEnd; //leaf if both 1 otherwise composite
+	bool isStart = false; 
+	bool isEnd = false; //leaf if both 1 otherwise composite
 	void divideLine(const std::string& content);
-
-	
 
 
 public:
 	XMLTag();
-	XMLTag(const XMLTag &xmlNode);
 	XMLTag(std::string content);
-	~XMLTag();
-	void showLine();
+	void showLine() const;
 	void populateVector();
 	std::string getName() const;
 	std::string getValue() const;
 	bool getIsStart() const;
 	bool getIsEnd() const;
-	XMLTag operator=(const XMLTag & rightXml);
+
 
 	
 };

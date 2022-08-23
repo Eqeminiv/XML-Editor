@@ -4,13 +4,12 @@
 class Attribute
 {
 private:
-	std::string name, value;
+	//const having troubles with vector push_back on XMLTag
+	std::string name;
+	std::string value;
 
 public:
-	Attribute(const std::string& name, const std::string& value);
-	~Attribute();
-	std::string getName();
-	std::string getValue();
-
-
+	Attribute(const std::string& _name, const std::string& _value);	
+	std::string getName() const;
+	std::string getValue() const;
 };

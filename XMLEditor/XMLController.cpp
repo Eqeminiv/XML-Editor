@@ -8,20 +8,14 @@
 
 
 
-XMLController::XMLController(const std::string& path)
+XMLController::XMLController(const std::string& _path) : path(_path)
 {
-
-	this->path = path;
-	
 	std::fstream file;
 	file.open(path, std::ios::in);
 	fileContent = readFile(file);
 	file.close();
-	std::stack<XMLTag> nodeStack;
-	
 	tree = new XMLComposite;
 
-	
 	std::string temp;
 	std::istringstream tempIstring(fileContent);
 	std::cout << fileContent << std::endl;
@@ -33,47 +27,7 @@ XMLController::XMLController(const std::string& path)
 	while (std::getline(tempIstring, temp))
 	{
 		XMLTag xmlNode = XMLTag(temp);
-		nodeStack.push(xmlNode);
-
 		this->nodeList.push_back(xmlNode);
-		
-
-
-			/*if (nodeStack.top().getIsEnd())
-			{
-
-				if (nodeStack.top().getIsStart())
-				{
-					XMLComponent* xmlLeaf = new XMLLeaf;
-					xmlLeaf->SetXMLTag(nodeStack.top());
-					currXMLComponent->Add(xmlLeaf);
-
-					nodeStack.pop();
-				}
-				else
-				{
-					XMLTag tempXMLTag = nodeStack.top();
-					nodeStack.pop();
-					if (tempXMLTag.getName() == nodeStack.top().getName())
-					{
-						nodeStack.pop();
-						currXMLComponent = currXMLComponent->GetParent();
-					}
-
-					else
-					{
-						//catch exception
-						throw std::runtime_error("Incorrect XML\n");
-					}
-				}
-			}
-			else
-			{
-				XMLComponent* xmlComponent = new XMLComposite;
-				xmlComponent->SetXMLTag(nodeStack.top());
-				currXMLComponent->Add(xmlComponent);
-				currXMLComponent = xmlComponent;
-			}*/
 
 		if (xmlNode.getIsEnd())
 		{
@@ -82,7 +36,6 @@ XMLController::XMLController(const std::string& path)
 				XMLComponent* xmlLeaf = new XMLLeaf;
 				xmlLeaf->SetXMLTag(xmlNode);
 				currXMLComponent->Add(xmlLeaf);
-
 			}
 			else
 			{
@@ -111,15 +64,11 @@ XMLController::XMLController(const std::string& path)
 			
 	}
 	tree->ShowAll(0);
+
+	delete tree;
 	
-
-
 }
 
-XMLController::~XMLController()
-{
-	//todo
-}
 
 bool XMLController::isXML(const std::string& path) 
 {
@@ -131,13 +80,7 @@ bool XMLController::isXML(const std::string& path)
 
 }
 
-bool XMLController::isXMLValid()
-{
-	return true;//todo
-}
-
-
-std::string XMLController::readFile(std::fstream& file)
+std::string XMLController::readFile(std::fstream& file) const
 {
 	std::string temp;
 	if (file.is_open())
@@ -148,12 +91,12 @@ std::string XMLController::readFile(std::fstream& file)
 	return "";
 	
 }
-std::string XMLController::getPath()
+std::string XMLController::getPath() const
 {
 	return path;
 }
 
-std::string XMLController::getFileContent()
+std::string XMLController::getFileContent() const
 {
 	return fileContent;
 }

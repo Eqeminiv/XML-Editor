@@ -11,12 +11,12 @@ XMLComponent::~XMLComponent()
 
 }
 
-void XMLComponent::SetParent(XMLComponent* parent)
+void XMLComponent::SetParent(XMLComponent* const parent)
 {
 	this->parent = parent;
 }
 
-XMLComponent* XMLComponent::GetParent()
+XMLComponent* XMLComponent::GetParent() const
 {
 	return this->parent;
 }
@@ -31,36 +31,36 @@ void XMLComponent::Remove(XMLComponent* xmlComponent)
 
 }
 
-void XMLComponent::ShowChildren()
+void XMLComponent::ShowChildren() const
 {
 
 }
 
-void XMLComponent::Show(int times)
+void XMLComponent::Show(const int times) const
 {
 	for (int i = 0; i < times; i++)
 		std::cout << " \t ";
 	info.showLine();
 }
 
-XMLTag XMLComponent::GetInfo()
+XMLTag XMLComponent::GetInfo() const
 {
 	return info;
 }
 
-void XMLComponent::ShowAll(int j)
+void XMLComponent::ShowAll(int j) const
 {
 
 }
 
-void XMLComponent::SetXMLTag(XMLTag xmlTag)
+void XMLComponent::SetXMLTag(const XMLTag xmlTag)
 {
 	info = xmlTag;
 }
 
 
 
-const bool XMLComponent::IsComposite()
+const bool XMLComponent::IsComposite() const
 {
 	return false;
 }
@@ -68,22 +68,27 @@ const bool XMLComponent::IsComposite()
 void XMLComposite::findChildren(const std::vector<XMLTag>& nodeList, const int startPoint)
 {
 	
-
-
-
-
-
 }
 
-void XMLComposite::ShowChildren()
+void XMLComposite::ShowChildren() const
 {
-	for (int i = 0; i < children.size(); i++)
+	for (auto child : children)
 	{
 		std::cout << std::endl;
-		children[i]->Show(0);
+		child->Show(0);
 	}
 }
 
+
+XMLComposite::~XMLComposite()
+{
+	for (auto child : children)
+	{
+		if (child != nullptr)
+			delete child;
+	}
+	
+}
 
 void XMLComposite::Add(XMLComponent* xmlComponent)
 {
@@ -91,25 +96,30 @@ void XMLComposite::Add(XMLComponent* xmlComponent)
 	xmlComponent->SetParent(this);
 }
 
-const bool XMLComposite::IsComposite()
+const bool XMLComposite::IsComposite() const
 {
 	return true;
 }
 
-void XMLComposite::ShowAll(int j)
+void XMLComposite::ShowAll(int j) const
 {
 	int starter = j;
-	for (int i = 0; i < children.size(); i++)
+	for (auto child : children)
 	{
 		j = starter;
-		if (!children[i]->IsComposite())
+		if (!child->IsComposite())
 		{
-			children[i]->Show(++j);
+			child->Show(++j);
 		}
 		else
 		{
-			children[i]->Show(++j);
-			children[i]->ShowAll(++j);
+			child->Show(++j);
+			child->ShowAll(++j);
 		}
 	}
 }
+
+/*XMLLeaf::~XMLLeaf()
+{
+	delete this;
+}*/

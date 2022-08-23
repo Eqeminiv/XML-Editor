@@ -1,22 +1,17 @@
 #include "Attribute.h"
+#include <iostream>
 
-Attribute::Attribute(const std::string& name, const std::string& value)
-{
-	this->name = name;
-	this->value = value;
-}
-
-Attribute::~Attribute()
+Attribute::Attribute(const std::string& _name, const std::string& _value) : name(_name), value(_value) 
 {
 
 }
 
-std::string Attribute::getName()
+std::string Attribute::getName() const
 {
 	return name;
 }
 
-std::string Attribute::getValue()
+std::string Attribute::getValue() const
 {
 	return value;
 }

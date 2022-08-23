@@ -10,18 +10,9 @@
 
 XMLTag::XMLTag()
 {
-	//todo
+
 }
 
-XMLTag::XMLTag(const XMLTag &xmlNode)
-{
-	name = xmlNode.name;
-	value = xmlNode.value;
-	attributeVector = xmlNode.attributeVector;
-	isStart = xmlNode.isStart;
-	isEnd = xmlNode.isEnd;
-	
-}
 
 XMLTag::XMLTag(std::string content)
 {
@@ -30,12 +21,6 @@ XMLTag::XMLTag(std::string content)
 	{
 		populateVector();
 	}
-
-}
-
-XMLTag::~XMLTag()
-{
-
 }
 
 void XMLTag::divideLine(const std::string& content)
@@ -86,20 +71,19 @@ void XMLTag::divideLine(const std::string& content)
 void XMLTag::populateVector()
 {
 	std::string temp;
-	for (int i = 0; i < value.length(); i++)
+	for (unsigned int i = 0; i < value.length(); i++)
 	{
 		if (value[i] == ' ')
 		{
 			temp = value.substr(i+1, value.length());
 			temp.erase(std::remove(temp.begin(), temp.end(), ' '), temp.end());
-			//std::cout << temp;
 			break;
 		}
 	}
 
-	for (int i = 0; i < temp.length(); i++)
+	for (unsigned int i = 0; i < temp.length(); i++)
 	{
-			int j;
+			unsigned int j;
 			std::string attributeName = "";
 			std::string attributeValue = "";
 			for (j = i; j < temp.length() && temp[j] != '=' ; j++)
@@ -119,16 +103,11 @@ void XMLTag::populateVector()
 				}				
 			}
 			attributeVector.push_back(Attribute(attributeName, attributeValue));
+
 	}
-
-	/*for (int i = 0; i < attributeVector.size(); i++)
-	{
-		std::cout << i+1 << "#: name:" << attributeVector[i].getName() << " - value:" << attributeVector[i].getValue() << std::endl;
-	}*/
-
 }
 
-void XMLTag::showLine()
+void XMLTag::showLine() const
 {
 	std::cout << name << ", " << ((isStart) ? "tak" : "nie") << ", " << ((isEnd) ? "tak" : "nie") << ", " << value << std::endl;
 }
@@ -153,12 +132,3 @@ bool XMLTag::getIsEnd() const
 	return isEnd;
 }
 
-XMLTag XMLTag::operator=(const XMLTag& rightXml)
-{
-	name = rightXml.name;
-	value = rightXml.value;
-	attributeVector = rightXml.attributeVector;
-	isStart = rightXml.isStart;
-	isEnd = rightXml.isEnd;
-	return *this;
-}
