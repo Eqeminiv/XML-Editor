@@ -12,4 +12,6 @@ public:
 	Attribute(const std::string& _name, const std::string& _value);	
 	std::string getName() const;
 	std::string getValue() const;
+	std::string getXMLFormatted() const;
+	bool operator== (const Attribute & right) const;
 };

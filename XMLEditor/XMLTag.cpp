@@ -64,7 +64,7 @@ void XMLTag::divideLine(const std::string& content)
 		isStart = true;
 		isEnd = false;
 	}
-	showLine();
+	//showLine();
 
 }
 
@@ -102,14 +102,16 @@ void XMLTag::populateVector()
 					break;
 				}				
 			}
-			attributeVector.push_back(Attribute(attributeName, attributeValue));
+			//attributeVector.push_back(Attribute(attributeName, attributeValue));
+			attributeVector.emplace_back(attributeName, attributeValue);
 
 	}
 }
 
 void XMLTag::showLine() const
 {
-	std::cout << name << ", " << ((isStart) ? "tak" : "nie") << ", " << ((isEnd) ? "tak" : "nie") << ", " << value << std::endl;
+	//std::cout << name << ", " << ((isStart) ? "tak" : "nie") << ", " << ((isEnd) ? "tak" : "nie") << ", " << value << std::endl;
+	std::cout << "<" << name << std::endl;
 }
 
 std::string XMLTag::getName() const
@@ -122,6 +124,20 @@ std::string XMLTag::getValue() const
 	return value;
 }
 
+std::vector<Attribute> XMLTag::getAttributeVector() const
+{
+	return attributeVector;
+}
+
+std::string XMLTag::getAllAttributeVectorXMLFormatted() const
+{
+	std::string returnal = "";
+	for (auto attribute : attributeVector)
+		returnal = returnal + attribute.getXMLFormatted() + " ";
+
+	return returnal.substr(0, returnal.length()-1);
+}
+
 bool XMLTag::getIsStart() const
 {
 	return isStart;
@@ -130,5 +146,11 @@ bool XMLTag::getIsStart() const
 bool XMLTag::getIsEnd() const
 {
 	return isEnd;
+}
+
+bool XMLTag::operator==(const XMLTag& right) const
+{
+	return (name == right.getName() && value == right.getValue() && attributeVector == right.getAttributeVector()
+		&& isStart == right.getIsStart() && isEnd == right.getIsEnd());
 }
 

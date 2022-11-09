@@ -22,8 +22,11 @@ public:
 	void populateVector();
 	std::string getName() const;
 	std::string getValue() const;
+	std::vector<Attribute> getAttributeVector() const;
+	std::string getAllAttributeVectorXMLFormatted() const;
 	bool getIsStart() const;
 	bool getIsEnd() const;
+	bool operator==(const XMLTag& right) const;
 
 
 	

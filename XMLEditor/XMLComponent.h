@@ -1,46 +1,57 @@
 #pragma once
 #include "XMLTag.h"
+#include <memory>
+#include <string>
 
-class XMLComponent
+class XMLComponent : public std::enable_shared_from_this<XMLComponent>
 {
 private:
 	XMLTag info;
 
 protected:
-	XMLComponent* parent = nullptr;
+	std::shared_ptr<XMLComponent> parent = nullptr;
+	
 	
 public:
 	XMLComponent();
+	XMLComponent(std::shared_ptr<XMLComponent> pointer);
 	virtual ~XMLComponent();
-	void SetParent(XMLComponent* const parent);
-	XMLComponent* GetParent() const;
-	virtual void Add(XMLComponent* xmlComponent);
-	virtual void Remove(XMLComponent* xmlComponent);
+	void SetParent(std::shared_ptr<XMLComponent> parent);
+	std::shared_ptr<XMLComponent> GetParent();
+	
+	virtual void Add(std::shared_ptr<XMLComponent> xmlComponent);
+	virtual void Remove();
 	virtual void ShowChildren() const;
-	void Show(const int times) const;
+	void Show(const int times, int level) const;
 	XMLTag GetInfo() const;
-	virtual void ShowAll(int j) const;
+	virtual void ShowAll(int level, int counter = 0) const;
 	void SetXMLTag(const XMLTag xmlTag);
 	const virtual bool IsComposite() const;
+	virtual void RemoveChild(XMLTag info);
+	virtual std::shared_ptr<XMLComponent> searchForNodeOnChildren(const std::string name);
+	
 	
 };
 
 class XMLLeaf : public XMLComponent
 {
-	
+	void Remove() override;
+	std::shared_ptr<XMLComponent> searchForNodeOnChildren(const std::string name) override;
 };
 
 class XMLComposite : public XMLComponent
 {
 protected:
-	std::vector<XMLComponent*> children;
+	std::vector<std::shared_ptr<XMLComponent>> children;
 
 public:
-	~XMLComposite();
-	void Add(XMLComponent* xmlComponent) override;
+	void Add(std::shared_ptr<XMLComponent> xmlComponent) override;
+	void Remove() override;
 	const bool IsComposite() const override;
 	void findChildren(const std::vector<XMLTag>& nodeList, const int startPoint);
 	void ShowChildren() const override;
-	void ShowAll(int j) const override;
+	void ShowAll(const int level, const int counter = 0) const override;
+	void RemoveChild(const XMLTag info);
+	std::shared_ptr<XMLComponent> searchForNodeOnChildren(const std::string name) override;
 
 };

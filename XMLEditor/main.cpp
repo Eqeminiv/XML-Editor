@@ -15,6 +15,7 @@ int main()
 			std::cin >> path;
 		}
 		XMLController controller(path);
+		//controller.getTree().get().
 	}
 	/*std::string test = "  <Agenda type=\"gardening\">";
 	std::regex reg("<\\w* tr");

@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <exception>
 #include <stack>
+#include <memory>
 
 
 
@@ -14,15 +15,19 @@ XMLController::XMLController(const std::string& _path) : path(_path)
 	file.open(path, std::ios::in);
 	fileContent = readFile(file);
 	file.close();
-	tree = new XMLComposite;
+
+	//tree = new XMLComposite;
+	tree = std::make_shared<XMLComposite>();
 
 	std::string temp;
 	std::istringstream tempIstring(fileContent);
 	std::cout << fileContent << std::endl;
 
 	tree->SetParent(nullptr);
+	
+	std::shared_ptr<XMLComponent> currXMLComponent = tree;
+	//XMLComponent* currXMLComponent = tree;
 
-	XMLComponent* currXMLComponent = tree;
 
 	while (std::getline(tempIstring, temp))
 	{
@@ -33,7 +38,8 @@ XMLController::XMLController(const std::string& _path) : path(_path)
 		{
 			if (xmlNode.getIsStart())
 			{
-				XMLComponent* xmlLeaf = new XMLLeaf;
+				std::shared_ptr<XMLLeaf> xmlLeaf = std::make_shared<XMLLeaf>();
+				//XMLComponent* xmlLeaf = new XMLLeaf;
 				xmlLeaf->SetXMLTag(xmlNode);
 				currXMLComponent->Add(xmlLeaf);
 			}
@@ -42,6 +48,7 @@ XMLController::XMLController(const std::string& _path) : path(_path)
 				XMLTag tempXMLTag = xmlNode;
 				if (currXMLComponent->GetInfo().getName() == xmlNode.getName())
 				{
+					//currXMLComponent->GetInfo().showLine();
 					currXMLComponent = currXMLComponent->GetParent();
 				}
 
@@ -54,7 +61,8 @@ XMLController::XMLController(const std::string& _path) : path(_path)
 		}
 		else
 		{
-			XMLComponent* xmlComponent = new XMLComposite;
+			//XMLComponent* xmlComponent = new XMLComposite;
+			std::shared_ptr<XMLComponent> xmlComponent = std::make_shared<XMLComposite>();
 			xmlComponent->SetXMLTag(xmlNode);
 			currXMLComponent->Add(xmlComponent);
 			currXMLComponent = xmlComponent;
@@ -63,9 +71,11 @@ XMLController::XMLController(const std::string& _path) : path(_path)
 			
 			
 	}
-	tree->ShowAll(0);
+	tree->searchForNodeOnChildren("Activity").get()->Remove();
+	//tree->searchForNodeOnChildren("Activity").get()->Remove();
+	tree->ShowAll(3);
 
-	delete tree;
+	//delete tree;
 	
 }
 
@@ -78,6 +88,11 @@ bool XMLController::isXML(const std::string& path)
 		return true;
 	return false;
 
+}
+
+std::shared_ptr<XMLComponent> XMLController::getTree()
+{
+	return tree;
 }
 
 std::string XMLController::readFile(std::fstream& file) const

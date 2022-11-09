@@ -15,3 +15,15 @@ std::string Attribute::getValue() const
 {
 	return value;
 }
+
+
+
+std::string Attribute::getXMLFormatted() const
+{
+	return name + "=" + "\"" + this->value + "\"";
+}
+
+bool Attribute::operator==(const Attribute& right) const
+{
+	return (name == right.getName() && value == right.getValue());
+}
