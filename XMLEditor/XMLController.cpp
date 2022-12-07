@@ -71,9 +71,10 @@ XMLController::XMLController(const std::string& _path) : path(_path)
 			
 			
 	}
-	tree->searchForNodeOnChildren("Activity").get()->Remove();
-	//tree->searchForNodeOnChildren("Activity").get()->Remove();
-	tree->ShowAll(3);
+	//tree->searchForNodeOnChildren("leaf")->Remove();
+	tree->searchForNodeOnChildren("Test")->Move(tree->searchForNodeOnChildren("lunch"));
+	//tree->searchForNodeOnChildren("Activity")->Remove();
+	tree->ShowAll(6);
 
 	//delete tree;
 	

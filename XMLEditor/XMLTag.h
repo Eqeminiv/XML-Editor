@@ -20,6 +20,8 @@ public:
 	XMLTag(std::string content);
 	void showLine() const;
 	void populateVector();
+	void SwitchIsEnd();
+	void AddRemoveClosingSlash();
 	std::string getName() const;
 	std::string getValue() const;
 	std::vector<Attribute> getAttributeVector() const;

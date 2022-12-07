@@ -28,7 +28,9 @@ public:
 	void SetXMLTag(const XMLTag xmlTag);
 	const virtual bool IsComposite() const;
 	virtual void RemoveChild(XMLTag info);
-	virtual std::shared_ptr<XMLComponent> searchForNodeOnChildren(const std::string name);
+	virtual std::shared_ptr<XMLComponent> searchForNodeOnChildren(const std::string& name);
+	std::shared_ptr<XMLComponent> GetParent() const;
+	void Move(std::shared_ptr<XMLComponent> target);
 	
 	
 };
@@ -36,7 +38,9 @@ public:
 class XMLLeaf : public XMLComponent
 {
 	void Remove() override;
-	std::shared_ptr<XMLComponent> searchForNodeOnChildren(const std::string name) override;
+	std::shared_ptr<XMLComponent> searchForNodeOnChildren(const std::string& name) override;
+
+	//void Move(std::shared_ptr<XMLComponent> target) override;
 };
 
 class XMLComposite : public XMLComponent
@@ -52,6 +56,11 @@ public:
 	void ShowChildren() const override;
 	void ShowAll(const int level, const int counter = 0) const override;
 	void RemoveChild(const XMLTag info);
-	std::shared_ptr<XMLComponent> searchForNodeOnChildren(const std::string name) override;
+	std::vector<std::shared_ptr<XMLComponent>> GetChildren();
+	std::shared_ptr<XMLComponent> searchForNodeOnChildren(const std::string& name) override;
+
+	//void Move(std::shared_ptr<XMLComponent> target) override;
+
+
 
 };

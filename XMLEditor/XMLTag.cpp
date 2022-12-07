@@ -108,10 +108,23 @@ void XMLTag::populateVector()
 	}
 }
 
+void XMLTag::SwitchIsEnd()
+{
+	isEnd = !isEnd;
+}
+
+void XMLTag::AddRemoveClosingSlash()
+{
+	if (isEnd)
+	{
+
+	}
+}
+
 void XMLTag::showLine() const
 {
-	//std::cout << name << ", " << ((isStart) ? "tak" : "nie") << ", " << ((isEnd) ? "tak" : "nie") << ", " << value << std::endl;
-	std::cout << "<" << name << std::endl;
+	std::cout << name << ", " << ((isStart) ? "tak" : "nie") << ", " << ((isEnd) ? "tak" : "nie") << ", " << value << std::endl;
+	//std::cout << "<" << name << std::endl;
 }
 
 std::string XMLTag::getName() const
