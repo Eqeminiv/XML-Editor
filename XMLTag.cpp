@@ -26,25 +26,40 @@ XMLTag::XMLTag(std::string content)
 void XMLTag::divideLine(const std::string& content)
 {
 	std::regex regForName("<[\\w-\\/]*");
-	std::regex regForValue("<.*>");
+	std::regex testRegex("<[\\s]*[\\w\\/]*");
+	std::regex regForValue("<[\\s]*.*[\\s]*>");
 	
-	std::regex regForStart("<\\/");
-	std::regex regForEnd("\\/>");
+	std::regex regForStart("<[\\s]*\\/");
+	std::regex regForEnd("\\/[\\s]*>");
 	std::smatch results;
 
 	std::string temp;
-	if (std::regex_search(content, results, regForName)) //name
+	if (std::regex_search(content, results, testRegex)) //name
 	{
-		temp = results[0].str().substr(1, results[0].str().length());
+		temp = results[0].str().substr(0, results[0].str().length());
+		std::cout << std::endl << temp << std::endl;
+		temp = std::regex_replace(temp, std::regex("<[\\s]*"), "");
+		//std::cout << std::endl << temp <<std::endl;
 		temp = std::regex_replace(temp, std::regex("\\/"), "");
 		name = temp;
+		
+		std::cout << "name: " << name << std::endl;
 	}
 
 	if (std::regex_search(content, results, regForValue)) //value
 	{
-		temp = results[0].str().substr(1, results[0].str().length() - 2);
+		
+		temp = results[0].str().substr(0, results[0].str().length());
+		std::cout << std::endl << temp << std::endl;
+		temp = std::regex_replace(temp, std::regex("<[\\s]*"), "");
+		temp = std::regex_replace(temp, std::regex("[\\s]*>"), "");
 		temp = std::regex_replace(temp, std::regex("\\/"), "");
+		//temp = std::regex_replace(temp, std::regex("\\"), "");
+
+
 		value = temp;
+
+		std::cout << "value: " << value << std::endl;
 
 	}
 
@@ -64,7 +79,7 @@ void XMLTag::divideLine(const std::string& content)
 		isStart = true;
 		isEnd = false;
 	}
-	//showLine();
+	showLine();
 
 }
 
@@ -106,6 +121,7 @@ void XMLTag::populateVector()
 			attributeVector.emplace_back(attributeName, attributeValue);
 
 	}
+
 }
 
 void XMLTag::SwitchIsEnd()

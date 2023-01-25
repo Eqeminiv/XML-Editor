@@ -34,6 +34,6 @@ public:
 	void MoveNode(const std::string from, const std::string to);
 	void RemoveNode(const std::string nodeName);
 	void SaveFile(bool toSameFile);
-
+	bool isStringOnlyWhiteSpace(std::string checkedString) const;
 };
 

@@ -31,5 +31,6 @@ public:
 	bool operator==(const XMLTag& right) const;
 
 
+
 	
 };

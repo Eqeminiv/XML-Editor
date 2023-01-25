@@ -20,58 +20,63 @@ void XMLController::Init(const std::string& path)
 	file.open(path, std::ios::in);
 	fileContent = readFile(file);
 	file.close();
+	//fileContent.replace('\s')
 
 	//tree = new XMLComposite;
 	tree = std::make_shared<XMLComposite>();
 
 	std::string temp;
 	std::istringstream tempIstring(fileContent);
+	
 	//std::cout << fileContent << std::endl;
 
-	tree->SetParent(nullptr);
-	
+	tree->SetParent(nullptr);	
 	std::shared_ptr<XMLComponent> currXMLComponent = tree;
 	//XMLComponent* currXMLComponent = tree;
 
 
-	while (std::getline(tempIstring, temp))
+	while (std::getline(tempIstring, temp, '>'))
 	{
-		std::cout << temp << std::endl;
-		XMLTag xmlNode = XMLTag(temp);
-		this->nodeList.push_back(xmlNode);
-
-		if (xmlNode.getIsEnd())
+		if (!isStringOnlyWhiteSpace(temp))
 		{
-			if (xmlNode.getIsStart())
+			temp = temp + ">";
+			std::cout << temp << std::endl;
+			XMLTag xmlNode = XMLTag(temp);
+			this->nodeList.push_back(xmlNode);
+
+			if (xmlNode.getIsEnd())
 			{
-				std::shared_ptr<XMLLeaf> xmlLeaf = std::make_shared<XMLLeaf>();
-				//XMLComponent* xmlLeaf = new XMLLeaf;
-				xmlLeaf->SetXMLTag(xmlNode);
-				currXMLComponent->Add(xmlLeaf);
+				if (xmlNode.getIsStart())
+				{
+					std::shared_ptr<XMLLeaf> xmlLeaf = std::make_shared<XMLLeaf>();
+					//XMLComponent* xmlLeaf = new XMLLeaf;
+					xmlLeaf->SetXMLTag(xmlNode);
+					currXMLComponent->Add(xmlLeaf);
+				}
+				else
+				{
+					XMLTag tempXMLTag = xmlNode;
+					if (currXMLComponent->GetInfo().getName() == xmlNode.getName())
+					{
+						//currXMLComponent->GetInfo().showLine();
+						currXMLComponent = currXMLComponent->GetParent();
+					}
+
+					else
+					{
+						//catch exception
+						throw std::runtime_error("Incorrect XML\n");
+					}
+				}
 			}
 			else
 			{
-				XMLTag tempXMLTag = xmlNode;
-				if (currXMLComponent->GetInfo().getName() == xmlNode.getName())
-				{
-					//currXMLComponent->GetInfo().showLine();
-					currXMLComponent = currXMLComponent->GetParent();
-				}
-
-				else
-				{
-					//catch exception
-					throw std::runtime_error("Incorrect XML\n");
-				}
+				//XMLComponent* xmlComponent = new XMLComposite;
+				std::shared_ptr<XMLComponent> xmlComponent = std::make_shared<XMLComposite>();
+				xmlComponent->SetXMLTag(xmlNode);
+				currXMLComponent->Add(xmlComponent);
+				currXMLComponent = xmlComponent;
 			}
-		}
-		else
-		{
-			//XMLComponent* xmlComponent = new XMLComposite;
-			std::shared_ptr<XMLComponent> xmlComponent = std::make_shared<XMLComposite>();
-			xmlComponent->SetXMLTag(xmlNode);
-			currXMLComponent->Add(xmlComponent);
-			currXMLComponent = xmlComponent;
 		}
 
 			
@@ -129,12 +134,19 @@ void XMLController::ShowXML(const int level) const
 
 void XMLController::MoveNode(const std::string from, const std::string to)
 {
-	tree->searchForNodeOnChildren(from)->Move(tree->searchForNodeOnChildren(to));
+	if (tree->searchForNodeOnChildren(from) && tree->searchForNodeOnChildren(to))
+		tree->searchForNodeOnChildren(from)->Move(tree->searchForNodeOnChildren(to));
+	else
+		throw std::runtime_error("Cannot find nodes\n");
+
 }
 
 void XMLController::RemoveNode(const std::string nodeName)
 {
-	tree->searchForNodeOnChildren(nodeName)->Remove();
+	if (tree->searchForNodeOnChildren(nodeName))
+		tree->searchForNodeOnChildren(nodeName)->Remove();
+	else
+		throw std::runtime_error("Cannot find node\n");
 }
 
 void XMLController::SaveFile(const bool toSameFile)
@@ -157,6 +169,16 @@ void XMLController::SaveFile(const bool toSameFile)
 
 }
 
+bool XMLController::isStringOnlyWhiteSpace(std::string checkedString) const
+{
+	for (int i = 0; i < checkedString.size(); i++)
+	{
+		if (!isspace(checkedString[i]))
+			return false;
+		//std::cout << i << ": " << isspace(checkedString[i]) << std::endl;
+	}
+	return true;
+}
 
 
 
