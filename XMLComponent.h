@@ -11,7 +11,6 @@ private:
 protected:
 	std::shared_ptr<XMLComponent> parent = nullptr;
 	
-	
 public:
 	XMLComponent();
 	XMLComponent(std::shared_ptr<XMLComponent> pointer);
@@ -31,15 +30,12 @@ public:
 	virtual std::shared_ptr<XMLComponent> searchForNodeOnChildren(const std::string& name);
 	std::shared_ptr<XMLComponent> GetParent() const;
 	void Move(std::shared_ptr<XMLComponent> target);
-	
 };
 
 class XMLLeaf : public XMLComponent
 {
 	void Remove() override;
 	std::shared_ptr<XMLComponent> searchForNodeOnChildren(const std::string& name) override;
-
-	//void Move(std::shared_ptr<XMLComponent> target) override;
 };
 
 class XMLComposite : public XMLComponent
@@ -57,9 +53,4 @@ public:
 	void RemoveChild(const XMLTag info);
 	std::vector<std::shared_ptr<XMLComponent>> GetChildren();
 	std::shared_ptr<XMLComponent> searchForNodeOnChildren(const std::string& name) override;
-
-	//void Move(std::shared_ptr<XMLComponent> target) override;
-
-
-
 };

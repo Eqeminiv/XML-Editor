@@ -13,8 +13,7 @@ XMLComponent::XMLComponent(std::shared_ptr<XMLComponent> pointer) : parent(point
 
 XMLComponent::~XMLComponent()
 {
-	GetInfo().showLine();
-	std::cout << "deleted" << std::endl;
+
 }
 
 void XMLComponent::SetParent(std::shared_ptr<XMLComponent> parent)
@@ -35,7 +34,7 @@ void XMLComponent::Add(std::shared_ptr<XMLComponent> xmlComponent)
 {
 }
 
-void XMLComponent::Remove() //maybe argument not needed
+void XMLComponent::Remove()
 {
 
 }
@@ -47,7 +46,6 @@ void XMLComponent::ShowChildren() const
 
 void XMLComponent::Show(const int times, int level) const
 {
-	
 	if (times <= level)
 	{
 		for (int i = 0; i < times; i++)
@@ -108,16 +106,11 @@ void XMLComponent::Move(std::shared_ptr<XMLComponent> target)
 {
 	std::dynamic_pointer_cast<XMLComposite>(parent)->RemoveChild(GetInfo());
 
-	if (std::dynamic_pointer_cast<XMLComposite>(parent)->GetChildren().size() < 1) //konwersja parenta na leaf?
+	if (std::dynamic_pointer_cast<XMLComposite>(parent)->GetChildren().size() < 1) //konwersja parenta na leaf
 	{
-		//przekonwertuj
-		//usun z parenta parenta dziecko
-		//dodaj nowe dziecko do parenta parenta
-
 		std::shared_ptr<XMLLeaf> xmlLeaf = std::make_shared<XMLLeaf>();
 		XMLTag xmlTag = parent->GetInfo();
 		xmlTag.SwitchIsEnd();
-		//xmlTag.showLine();
 		xmlLeaf->SetXMLTag(xmlTag);
 		parent->GetParent()->RemoveChild(parent->GetInfo());
 		auto empl1 = std::dynamic_pointer_cast<XMLComposite>(parent->GetParent())->GetChildren();
@@ -134,13 +127,11 @@ void XMLComponent::Move(std::shared_ptr<XMLComponent> target)
 		std::shared_ptr<XMLComposite> xmlComposite = std::make_shared<XMLComposite>();
 		XMLTag xmlTag = target->GetInfo();
 		xmlTag.SwitchIsEnd();
-		//xmlTag.showLine();
 		xmlComposite->SetXMLTag(xmlTag);
 		target->GetParent()->RemoveChild(target->GetInfo());
 		auto empl1 = std::dynamic_pointer_cast<XMLComposite>(target->GetParent())->GetChildren();
 		empl1.emplace(empl1.begin(), xmlComposite);
 		xmlComposite->SetParent(target->GetParent());
-
 		std::dynamic_pointer_cast<XMLComposite>(xmlComposite)->Add(shared_from_this());
 	}
 }
@@ -156,62 +147,11 @@ std::shared_ptr<XMLComponent> XMLComposite::searchForNodeOnChildren(const std::s
 		node = child->searchForNodeOnChildren(name);
 		if (node != nullptr)
 		{
-			//std::cout << "znaleziono: " << node->GetInfo().getName();
 			return node;
 		}
 	}
-
 	return nullptr;
 }
-
-/*void XMLComposite::Move(std::shared_ptr<XMLComponent> target)
-{
-	int pastPlaceOfParent = 0;
-	for (auto& child : std::dynamic_pointer_cast<XMLComposite>(parent->GetParent())->children)
-	{
-		if (child == parent)
-		{
-			break;
-		}
-		pastPlaceOfParent++;
-	}
-	
-	std::dynamic_pointer_cast<XMLComposite>(parent)->RemoveChild(GetInfo());
-
-	if (std::dynamic_pointer_cast<XMLComposite>(parent)->GetChildren().size() < 1) //konwersja parenta na leaf?
-	{
-		//przekonwertuj
-		//usun z parenta parenta dziecko
-		//dodaj nowe dziecko do parenta parenta
-
-		std::shared_ptr<XMLLeaf> xmlLeaf = std::make_shared<XMLLeaf>();
-		XMLTag xmlTag = parent->GetInfo();
-		xmlTag.SwitchIsEnd();
-		//xmlTag.showLine();
-		xmlLeaf->SetXMLTag(xmlTag);
-		parent->GetParent()->RemoveChild(parent->GetInfo());
-		std::dynamic_pointer_cast<XMLComposite>(parent->GetParent())->children.emplace(std::dynamic_pointer_cast<XMLComposite>(parent->GetParent())->children.begin(), xmlLeaf);
-		xmlLeaf->SetParent(parent->GetParent());
-	}
-
-	if (target->IsComposite()) //target jest kompozytem
-	{		
-		std::dynamic_pointer_cast<XMLComposite>(target)->Add(shared_from_this());
-	}
-	else //target jest lisciem -> konwersja na kompozyt
-	{
-		std::shared_ptr<XMLComposite> xmlComposite = std::make_shared<XMLComposite>();
-		XMLTag xmlTag = target->GetInfo();
-		xmlTag.SwitchIsEnd();
-		xmlComposite->SetXMLTag(xmlTag);
-		target->GetParent()->RemoveChild(target->GetInfo());
-	
-		std::dynamic_pointer_cast<XMLComposite>(target->GetParent())->children.emplace(std::dynamic_pointer_cast<XMLComposite>(target->GetParent())->children.begin(), xmlComposite);
-		xmlComposite->SetParent(target->GetParent());
-
-		std::dynamic_pointer_cast<XMLComposite>(xmlComposite)->Add(shared_from_this());
-	}
-}*/
 
 void XMLComposite::findChildren(const std::vector<XMLTag>& nodeList, const int startPoint)
 {
@@ -239,7 +179,6 @@ void XMLComposite::Remove()
 	std::shared_ptr<XMLComposite> temp = std::dynamic_pointer_cast<XMLComposite>(parent);
 	parent = nullptr;
 	temp->RemoveChild(GetInfo());
-
 }
 
 const bool XMLComposite::IsComposite() const
@@ -266,7 +205,6 @@ void XMLComposite::ShowAll(const int maxLevel, const int currentLevel) const
 					std::cout << std::endl;
 				}
 			}
-			
 	}
 }
 
@@ -277,7 +215,6 @@ void XMLComposite::RemoveChild(const XMLTag info)
 	{
 		if (children[i]->GetInfo() == info)
 		{
-			std::cout << "usunieto zioma: " << children[i]->GetInfo().getName() <<std::endl;
 			children.erase(children.begin() + i);
 			i = -1;
 		}
@@ -304,43 +241,3 @@ std::shared_ptr<XMLComponent> XMLLeaf::searchForNodeOnChildren(const std::string
 		return shared_from_this();
 	return nullptr;
 }
-
-/*void XMLLeaf::Move(std::shared_ptr<XMLComponent> target)
-{
-	std::dynamic_pointer_cast<XMLComposite>(parent)->RemoveChild(GetInfo());
-
-	if (std::dynamic_pointer_cast<XMLComposite>(parent)->GetChildren().size() < 1) //konwersja parenta na leaf?
-	{
-		//przekonwertuj
-		//usun z parenta parenta dziecko
-		//dodaj nowe dziecko do parenta parenta
-
-		std::shared_ptr<XMLLeaf> xmlLeaf = std::make_shared<XMLLeaf>();
-		XMLTag xmlTag = parent->GetInfo();
-		xmlTag.SwitchIsEnd();
-		//xmlTag.showLine();
-		xmlLeaf->SetXMLTag(xmlTag);
-		parent->GetParent()->RemoveChild(parent->GetInfo());
-		auto empl1 = std::dynamic_pointer_cast<XMLComposite>(parent->GetParent())->GetChildren();
-		empl1.emplace(empl1.begin(), xmlLeaf);
-		xmlLeaf->SetParent(parent->GetParent());
-	}
-
-	if (target->IsComposite()) //target jest kompozytem
-	{
-		std::dynamic_pointer_cast<XMLComposite>(target)->Add(shared_from_this());
-	}
-	else //target jest lisciem -> konwersja na kompozyt
-	{
-		std::shared_ptr<XMLComposite> xmlComposite = std::make_shared<XMLComposite>();
-		XMLTag xmlTag = target->GetInfo();
-		xmlTag.SwitchIsEnd();
-		xmlComposite->SetXMLTag(xmlTag);
-		target->GetParent()->RemoveChild(target->GetInfo());
-		auto empl1 = std::dynamic_pointer_cast<XMLComposite>(target->GetParent())->GetChildren();
-		empl1.emplace(empl1.begin(), xmlComposite);
-		xmlComposite->SetParent(target->GetParent());
-
-		std::dynamic_pointer_cast<XMLComposite>(xmlComposite)->Add(shared_from_this());
-	}
-}*/

@@ -6,21 +6,13 @@
 #include <fstream>
 #include <memory>
 
-
-
-
-
 class XMLController
 {
 private:
 	std::string path;
 	std::string fileContent;
 	std::vector<XMLTag> nodeList;
-	
-	//XMLComponent* tree;
 	std::shared_ptr<XMLComponent> tree;
-	
-
 
 public:
 	XMLController();
@@ -31,9 +23,9 @@ public:
 	std::string readFile(std::fstream& file) const;
 	std::string getFileContent() const;
 	void ShowXML(const int level) const;
-	void MoveNode(const std::string from, const std::string to);
-	void RemoveNode(const std::string nodeName);
-	void SaveFile(bool toSameFile);
-	bool isStringOnlyWhiteSpace(std::string checkedString) const;
+	void MoveNode(const std::string& from, const std::string& to);
+	void RemoveNode(const std::string& nodeName);
+	void SaveFile(const bool toSameFile);
+	bool isStringOnlyWhiteSpace(const std::string& checkedString) const;
 };
 

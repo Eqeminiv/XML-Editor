@@ -7,13 +7,12 @@
 class XMLTag
 {
 private:
-	std::string name; //same with push_back but for XMLController
+	std::string name;
 	std::string value;
 	std::vector<Attribute> attributeVector;
 	bool isStart = false; 
-	bool isEnd = false; //leaf if both 1 otherwise composite
+	bool isEnd = false;
 	void divideLine(const std::string& content);
-
 
 public:
 	XMLTag();
@@ -29,8 +28,4 @@ public:
 	bool getIsStart() const;
 	bool getIsEnd() const;
 	bool operator==(const XMLTag& right) const;
-
-
-
-	
 };

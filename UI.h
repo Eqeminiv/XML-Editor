@@ -4,6 +4,6 @@
 class UI
 {
 public:
-	void Run();
+	static void Run();
 };
 

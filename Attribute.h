@@ -4,7 +4,6 @@
 class Attribute
 {
 private:
-	//const having troubles with vector push_back on XMLTag
 	std::string name;
 	std::string value;
 

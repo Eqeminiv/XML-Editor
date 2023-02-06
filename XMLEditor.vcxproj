@@ -127,12 +127,14 @@
   <ItemGroup>
     <ClCompile Include="Attribute.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="XMLComponent.cpp" />
     <ClCompile Include="XMLController.cpp" />
     <ClCompile Include="XMLTag.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Attribute.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="XMLComponent.h" />
     <ClInclude Include="XMLController.h" />
     <ClInclude Include="XMLTag.h" />

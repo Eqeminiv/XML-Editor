@@ -25,10 +25,8 @@ XMLTag::XMLTag(std::string content)
 
 void XMLTag::divideLine(const std::string& content)
 {
-	std::regex regForName("<[\\w-\\/]*");
 	std::regex testRegex("<[\\s]*[\\w\\/]*");
 	std::regex regForValue("<[\\s]*.*[\\s]*>");
-	
 	std::regex regForStart("<[\\s]*\\/");
 	std::regex regForEnd("\\/[\\s]*>");
 	std::smatch results;
@@ -37,30 +35,18 @@ void XMLTag::divideLine(const std::string& content)
 	if (std::regex_search(content, results, testRegex)) //name
 	{
 		temp = results[0].str().substr(0, results[0].str().length());
-		std::cout << std::endl << temp << std::endl;
 		temp = std::regex_replace(temp, std::regex("<[\\s]*"), "");
-		//std::cout << std::endl << temp <<std::endl;
 		temp = std::regex_replace(temp, std::regex("\\/"), "");
 		name = temp;
-		
-		std::cout << "name: " << name << std::endl;
 	}
 
 	if (std::regex_search(content, results, regForValue)) //value
 	{
-		
 		temp = results[0].str().substr(0, results[0].str().length());
-		std::cout << std::endl << temp << std::endl;
 		temp = std::regex_replace(temp, std::regex("<[\\s]*"), "");
 		temp = std::regex_replace(temp, std::regex("[\\s]*>"), "");
 		temp = std::regex_replace(temp, std::regex("\\/"), "");
-		//temp = std::regex_replace(temp, std::regex("\\"), "");
-
-
 		value = temp;
-
-		std::cout << "value: " << value << std::endl;
-
 	}
 
 	if (std::regex_search(content, results, regForStart)) //StartEnd
@@ -79,8 +65,6 @@ void XMLTag::divideLine(const std::string& content)
 		isStart = true;
 		isEnd = false;
 	}
-	showLine();
-
 }
 
 void XMLTag::populateVector()
@@ -117,11 +101,8 @@ void XMLTag::populateVector()
 					break;
 				}				
 			}
-			//attributeVector.push_back(Attribute(attributeName, attributeValue));
 			attributeVector.emplace_back(attributeName, attributeValue);
-
 	}
-
 }
 
 void XMLTag::SwitchIsEnd()
@@ -140,7 +121,6 @@ void XMLTag::AddRemoveClosingSlash()
 void XMLTag::showLine() const
 {
 	std::cout << name << ", " << ((isStart) ? "tak" : "nie") << ", " << ((isEnd) ? "tak" : "nie") << ", " << value << std::endl;
-	//std::cout << "<" << name << std::endl;
 }
 
 std::string XMLTag::getName() const

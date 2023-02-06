@@ -1,6 +1,7 @@
 #include "UI.h"
 #include <iostream>
 #include <filesystem>
+#include <exception>
 
 void UI::Run()
 {
@@ -13,34 +14,50 @@ void UI::Run()
 	XMLController controller;
 	controller.Init(path);
 	controller.ShowXML(100);
-	enum choices { Move = 1, Delete = 2, Show = 3, SaveAs = 4, Load = 5, Exit = 9};
-	int choice = INT_MIN;
-	while (choice != Exit)
+	enum class Choice : int { Move = 1, Delete = 2, Show = 3, SaveAs = 4, Load = 5, Exit = 9};
+	Choice choice = Choice::Move;
+	int choiceInput;
+	while (choice != Choice::Exit)
 	{
 		std::cout << std::endl << "Options: " << std::endl << "(1) Move node" << std::endl << "(2) Delete node" << std::endl << "(3) Show XML" << std::endl
 			<< "(4) Save as" << std::endl << "(5) Load XML" << std::endl << "(9) Exit" << std::endl;
-		std::cin >> choice;
+		std::cin >> choiceInput;
+		choice = (Choice)choiceInput;
 		switch (choice)
 		{
-		case Move:
+		case Choice::Move:
 		{
 			std::string from, to;
 			std::cout << "Enter name of node you want to move: ";
 			std::cin >> from;
 			std::cout << "Enter name of the target node: ";
 			std::cin >> to;
-			controller.MoveNode(from, to);
+			try
+			{
+				controller.MoveNode(from, to);
+			}
+			catch (const std::exception& error)
+			{
+				std::cout << error.what();
+			}
 			break;
 		}
-		case Delete:
+		case Choice::Delete:
 		{
 			std::string nodeName;
 			std::cout << "Enter name of node you want to remove: ";
 			std::cin >> nodeName;
-			controller.RemoveNode(nodeName);
+			try
+			{
+				controller.RemoveNode(nodeName);
+			}
+			catch(const std::exception& error)
+			{
+				std::cout << error.what();
+			}
 			break;
 		}
-		case Show:
+		case Choice::Show:
 		{
 			int level;
 			std::cout << "Enter maximum number of levels you want to be showed: ";
@@ -48,12 +65,12 @@ void UI::Run()
 			controller.ShowXML(level);
 			break;
 		}
-		case SaveAs:
+		case Choice::SaveAs:
 		{
 			controller.SaveFile(true);
 			break;
 		}
-		case Load:
+		case Choice::Load:
 		{
 			path = "";
 			while (!std::filesystem::exists(path) || !XMLController::isXML(path))
@@ -64,7 +81,7 @@ void UI::Run()
 			controller.Init(path);
 			break;
 		}
-		case Exit:
+		case Choice::Exit:
 			break;
 		}
 	}
